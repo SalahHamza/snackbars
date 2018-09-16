@@ -1,16 +1,12 @@
 
 export default class Snackbar {
 
-	constructor(name, message, duration, prioritize = false, order = 0) {
+	constructor(name, message, duration, prioritize = false) {
     this.name = name;
     this._message = message;
     this._duration = duration;
     /* used to see if snackbar should be shown ime */
     this.prioritize = prioritize;
-
-    /* keeping a list of all timeouts to
-    clear them when snackbar is gone */
-    this._timeouts = [];
 
     /* creating snackbar */
     this.create();
@@ -18,13 +14,10 @@ export default class Snackbar {
     /* setting timeout to hide snackbar if duration is provided */
     if(this._duration && this._duration > 0){
       // set a timeout && hide (clear timeout as well)
-      const hideTimeout = setTimeout(() => {
+      setTimeout(() => {
         this.hide();
       }, this._duration);
 
-
-      // keeping it for later clear
-      this._timeouts.push(hideTimeout);
     }
 
     /* adding event, to check if snackbar was deleted */
@@ -48,7 +41,7 @@ export default class Snackbar {
 
     /* create snackbar message */
     const messageElem = document.createElement('p');
-		messageElem.classList.add('message');
+		messageElem.classList.add('snackbar-message');
     messageElem.textContent = this._message;
     this.container.appendChild(messageElem);
 
@@ -64,7 +57,7 @@ export default class Snackbar {
    */
   setAction(name, callback, hideManually = false){
     const buttonElem = document.createElement('button');
-    buttonElem.classList.add('snackbut');
+    buttonElem.classList.add('snackbar-button');
     buttonElem.innerText = name;
 
     /* Action Event */
@@ -87,25 +80,20 @@ export default class Snackbar {
    */
   show(nodeToAppendTo){
     nodeToAppendTo.appendChild(this.container);
-    // set timeout to fade snacbar in
-    const opacityTimeout = setTimeout(() => {
-      this.container.style.opacity = '1';
-    }, 500);
-    this._timeouts.push(opacityTimeout);
+    setTimeout(() => {
+      this.container.classList.add('snackbar-visible');
+    }, 350);
   }
 
   /**
    * hides snackbar and dispatches event that the snackbar was hidden
    */
   hide(){
-    this.container.parentNode.removeChild(this.container);
-
+    this.container.classList.remove('snackbar-visible');
+    setTimeout(() => {
+      this.container.parentNode.removeChild(this.container);
+    }, 350);
     this.container.dispatchEvent(this._hideEvent);
-    /* clear all set timeouts */
-    for(let timeout of this._timeouts){
-      clearTimeout(timeout);
-    }
-    this._timeouts = [];
   }
 
 }

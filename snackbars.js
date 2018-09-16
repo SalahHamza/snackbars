@@ -1,4 +1,3 @@
-import snackbarStyles from './snackbarSyles';
 import Snackbar from './snackbar';
 
 const OFFLINE_SNACK = {
@@ -14,11 +13,9 @@ export default class Snackbars {
    *
    * @param {Object} container - DOM element to append snackbar to
    * @param {Boolean} makeCustomeOfflineSnackbar - If true (default), makes makes custome snackbar
-   * @param {*} styles
    */
-  constructor(container, makeCustomeOfflineSnackbar = true, styles = snackbarStyles) {
+  constructor(container, makeCustomeOfflineSnackbar = true) {
     this.container = container;
-    this._styles = `${styles.container}${styles.message}${styles.buttons}`;
     this._pendingSnackbars = new Map();
 
     if(makeCustomeOfflineSnackbar) {
@@ -83,24 +80,6 @@ export default class Snackbars {
    */
   get(snackbarName){
     return this._pendingSnackbars.get(snackbarName);
-  }
-
-  /**
-   * sets a Stylesheet with snackbar styles in the head element
-   * @param {Object} doc - document DOM object for the app
-   */
-  setSnackbarCSS(doc){
-    const head = doc.head || doc.getElementsByTagName('head')[0],
-    style = doc.createElement('style');
-
-    style.type = 'text/css';
-    if (style.styleSheet){
-      // This is required for IE8 and below.
-      style.styleSheet.cssText = this._styles;
-    } else {
-      style.appendChild(doc.createTextNode(this._styles));
-    }
-    head.appendChild(style);
   }
 
   /**

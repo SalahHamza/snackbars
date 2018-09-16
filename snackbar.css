@@ -1,0 +1,53 @@
+/*============= Snackbar =============*/
+
+.snackbar {
+  display: flex;
+  position: fixed;
+  visibility: hidden;
+  box-sizing: border-box;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 3;
+  background-color: rgba(0,0,0,0.9);
+  padding: 14px 0 14px 24px;
+  transform: translateY(100px);
+  will-change: transform;
+  transition: visibility 0.3s, transform 0.3s;
+}
+
+.snackbar-visible {
+  visibility: visible;
+  transform: none;
+}
+
+/* media query */
+@media screen and (min-width: 624px) {
+  .snackbar {
+    bottom: 16px;
+    left: 24px;
+    width: fit-content;
+    border-radius: 2px;
+    min-width: 300px;
+    max-width: 600px
+  }
+}
+
+/*============= message =============*/
+.snackbar-message {
+  flex: 1;
+  color: white;
+  margin: 0 48px 0 0;
+}
+
+/*============= button =============*/
+.snackbar-button {
+  margin: 0 24px 0 0;
+  float: right;
+  color: tomato;
+  text-transform: uppercase;
+  background-color: transparent;
+  border: 0;
+  letter-spacing: 1px;
+  cursor: pointer;
+}
