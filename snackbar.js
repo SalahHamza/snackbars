@@ -1,12 +1,12 @@
-import { containerStyles, messageStyles, buttonStyles} from 'snackbarStyles';
-
-const STYLES = `${containerStyles}${messageStyles}${buttonStyles}`;
-
 
 export default class Snackbar {
-	constructor(message, duration) {
+
+	constructor(name, message, duration, prioritize = false, order = 0) {
+    this.name = name;
     this._message = message;
     this._duration = duration;
+    /* used to see if snackbar should be shown ime */
+    this.prioritize = prioritize;
 
     /* keeping a list of all timeouts to
     clear them when snackbar is gone */
@@ -20,31 +20,22 @@ export default class Snackbar {
       // set a timeout && hide (clear timeout as well)
       const hideTimeout = setTimeout(() => {
         this.hide();
-      }, this._duration * 1000);
+      }, this._duration);
+
+
       // keeping it for later clear
       this._timeouts.push(hideTimeout);
     }
 
-    Snackbar.setSnackbarCSS = Snackbar.setSnackbarCSS.bind(this);
+    /* adding event, to check if snackbar was deleted */
+    const eventName = `${this.name}_hide`;
+
+    // create and dispatch the event
+    this._hideEvent = new CustomEvent(eventName);
+
   }
 
-  /**
-   * sets a Stylesheet with snackbar styles in the head element
-   * @param {Object} doc - document DOM object for the app
-   */
-  static setSnackbarCSS(doc){
-    const head = doc.head || doc.getElementsByTagName('head')[0],
-    style = doc.createElement('style');
 
-    style.type = 'text/css';
-    if (style.styleSheet){
-      // This is required for IE8 and below.
-      style.styleSheet.cssText = STYLES;
-    } else {
-      style.appendChild(doc.createTextNode(STYLES));
-    }
-    head.appendChild(style);
-  }
 
   /**
    * Creates snackbar container and sets message
@@ -103,11 +94,15 @@ export default class Snackbar {
     this._timeouts.push(opacityTimeout);
   }
 
+  /**
+   * hides snackbar and dispatches event that the snackbar was hidden
+   */
   hide(){
     this.container.parentNode.removeChild(this.container);
 
+    this.container.dispatchEvent(this._hideEvent);
     /* clear all set timeouts */
-    for(let timeout in this._timeouts){
+    for(let timeout of this._timeouts){
       clearTimeout(timeout);
     }
     this._timeouts = [];
