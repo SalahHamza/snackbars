@@ -1,11 +1,24 @@
 {
-  "name": "snackbar",
-  "version": "1.0.0",
+  "name": "@salahhamza/snackbar",
+  "version": "1.0.1",
   "description": "Costume snackbar that works like Snackbars in Android",
   "main": "snackbar.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Salah Hamza",
-  "license": "ISC"
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SalahHamza/snackbar.git"
+  },
+  "keywords": [
+    "ui",
+    "snackbar",
+    "javascript"
+  ],
+  "bugs": {
+    "url": "https://github.com/SalahHamza/snackbar/issues"
+  },
+  "homepage": "https://github.com/SalahHamza/snackbar#readme"
 }
