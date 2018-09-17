@@ -12,7 +12,7 @@ export default class Snackbars {
    * @param {Object} container - DOM element to append snackbar to
    * @param {Boolean} makeCustomeOfflineSnackbar - If true (default), makes makes custome snackbar
    */
-  constructor(container = document.body, makeOfflineSnackbar = false) {
+  constructor(container, makeOfflineSnackbar = false) {
     this.container = container;
     this.isActive = false;
     this.queue = [];
