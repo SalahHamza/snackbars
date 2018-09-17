@@ -1,28 +1,27 @@
 
 export default class Snackbar {
 
-	constructor(name, message, duration, prioritize = false) {
+  /**
+   *
+   * @param {String} name - Snackbar name
+   * @param {String} message - Snackbar message
+   * @param {Number} duration - Snackbar lifetime in miliseconds
+   */
+	constructor(name, message, duration = 3200) {
     this.name = name;
-    this._message = message;
-    this._duration = duration;
-    /* used to see if snackbar should be shown ime */
-    this.prioritize = prioritize;
+    this.message = message;
+    this.duration = duration;
 
     /* creating snackbar */
     this.create();
 
-    /* setting timeout to hide snackbar if duration is provided */
-    if(this._duration && this._duration > 0){
-      // set a timeout && hide (clear timeout as well)
-      setTimeout(() => {
-        this.hide();
-      }, this._duration);
-
-    }
+    /* set a timeout to hide snackbar */
+    this.hideTimeout = setTimeout(() => {
+      this.hide();
+    }, this.duration);
 
     /* adding event, to check if snackbar was deleted */
     const eventName = `${this.name}_hide`;
-
     // create and dispatch the event
     this._hideEvent = new CustomEvent(eventName);
 
@@ -42,7 +41,7 @@ export default class Snackbar {
     /* create snackbar message */
     const messageElem = document.createElement('p');
 		messageElem.classList.add('snackbar-message');
-    messageElem.textContent = this._message;
+    messageElem.textContent = this.message;
     this.container.appendChild(messageElem);
 
     // returning 'this' for chaining
@@ -55,18 +54,20 @@ export default class Snackbar {
    * @param {Function} callback - Function to call when action called (button click)
    * @param {Boolean} hideManually - hide the snackbar manually if 'true'
    */
-  setAction(name, callback, hideManually = false){
+  setAction({name, handler, dismissOnAction = true}){
     const buttonElem = document.createElement('button');
     buttonElem.classList.add('snackbar-button');
     buttonElem.innerText = name;
 
     /* Action Event */
     buttonElem.addEventListener('click', (event) => {
-      if(callback){
-        callback(event.target, this.container);
+      if(handler){
+        handler(event.target, this.container);
       }
-      if(hideManually) return;
-      this.hide();
+      if(dismissOnAction) {
+        clearTimeout(this.hideTimeout);
+        this.hide();
+      }
     });
 
     this.container.appendChild(buttonElem);
@@ -82,7 +83,7 @@ export default class Snackbar {
     nodeToAppendTo.appendChild(this.container);
     setTimeout(() => {
       this.container.classList.add('snackbar-visible');
-    }, 350);
+    }, 250);
   }
 
   /**
@@ -92,7 +93,8 @@ export default class Snackbar {
     this.container.classList.remove('snackbar-visible');
     setTimeout(() => {
       this.container.parentNode.removeChild(this.container);
-    }, 350);
+    }, 250);
+    /* dispatch an event that current snackbar was hidden */
     this.container.dispatchEvent(this._hideEvent);
   }
 

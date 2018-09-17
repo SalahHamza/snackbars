@@ -1,11 +1,9 @@
 import Snackbar from './snackbar';
+import {hasItem} from './util';
 
 const OFFLINE_SNACK = {
   name: 'offline',
-  message: 'You are currently offline',
-  actions: [{
-    name: 'dismiss'
-  }]
+  message: 'You are currently offline'
 }
 
 export default class Snackbars {
@@ -14,97 +12,76 @@ export default class Snackbars {
    * @param {Object} container - DOM element to append snackbar to
    * @param {Boolean} makeCustomeOfflineSnackbar - If true (default), makes makes custome snackbar
    */
-  constructor(container, makeCustomeOfflineSnackbar = true) {
+  constructor(container = document.body, makeOfflineSnackbar = false) {
     this.container = container;
-    this._pendingSnackbars = new Map();
+    this.isActive = false;
+    this.queue = [];
 
-    if(makeCustomeOfflineSnackbar) {
-      this._makeCustomeOfflineSnackbar();
+    if(makeOfflineSnackbar) {
+      /* Showing offline message when client is offline */
+      window.addEventListener('offline', () => {
+        this.show(OFFLINE_SNACK);
+      });
+      window.addEventListener('online', () => {
+        this.queue = this.queue.filter(snack => snack.name !== OFFLINE_SNACK.name);
+      });
     }
 
   }
-
 
   /**
    *
-   * @param {Object} param0 - snackbar configuration object
+   * @param {Object} configObj - snackbar configuration object
    */
-  make({name, message, prioritize, duration, actions = []}){
-    if(!message || !name) throw new Error('No snackbar message provided');
+  show(configObj) {
+    const {name, message, action, duration, dismissOnAction, gap = 500} = configObj;
+    /* checking if the two most important properties are present */
+    if(!message || !name){
+      throw new Error('Snackbar name or message weren\'t provided.');
+    }
+
+    /*
+      checking if there a snackbar is already appearing
+        - if so we check
+          - if the new snackbar is already in the list
+            so that we don't show a snackbar two times
+            consecutively
+          and we add new snackbar to the queue and return.
+     */
+    if(this.isActive) {
+      if(hasItem(this.queue, 'name', name)) return;
+      this.queue.push(configObj);
+      return;
+    }
 
     /* making new snackbar and adding it to pending snackbars */
-    const snackbar = new Snackbar(name, message, duration, prioritize);
-    this._pendingSnackbars.set(name, snackbar);
-
-    /* setting snackbar actions */
-    for(const action of actions){
-      snackbar.setAction(action.name, action.callback)
+    const snackbar = new Snackbar(name, message, duration, dismissOnAction);
+    if(action){
+      /* setting snackbar action */
+      snackbar.setAction(action);
     }
+    snackbar.show(this.container);
+    /* we put that we currently have a visible snackbar */
+    this.isActive = true;
+    /* we remove the first item of the queue if it exist */
+    this.queue.shift();
+    this.addSnackbarHideEvent(snackbar, gap);
+  }
 
-    /* listening for snackbar is hidden */
-    snackbar.container.addEventListener(`${name}_hide`, (e) => {
-      this._pendingSnackbars.delete(name);
-      this._visibleSnackbar = null;
-
-      /* chechking if there is a pending snackbar and showing it */
-      if(this._pendingSnackbars.size > 0){
-        const snackToShowName = this._pendingSnackbars.keys().next().value;
-        this.show(snackToShowName);
+  /**
+   *
+   * @param {Object} snackbar - snackbar instance to add event to
+   * @param {*} gap - gap to show next snackbar
+   */
+  addSnackbarHideEvent(snackbar, gap) {
+    snackbar.container.addEventListener(`${snackbar.name}_hide`, () => {
+      this.isActive = false;
+      if(this.queue.length) {
+        setTimeout(() => {
+          this.show(this.queue[0]);
+        }, gap);
       }
     });
   }
 
-  /**
-   * @param {String} snackbarName - snackbar name to show
-   */
-  show(snackbarName){
-    const snack = this.get(snackbarName);
-    /* checking if there is a snackbar visible */
-    if(!this._visibleSnackbar){
-      /* if not, we set the new to-be visible snackbar */
-      this._visibleSnackbar = snack;
-    } else {
-      /* if so, we check if snack bar should be prioritized,
-      and decide whether to show it or not */
-      if(!snack.prioritize) return;
-
-      this._visibleSnackbar.hide();
-      this._visibleSnackbar = snack;
-    }
-    this._visibleSnackbar.show(this.container);
-  }
-
-  /**
-   * shortcut to get snackbar from pending snackbars
-   * @param {String} snackbarName - snackbar name to get
-   */
-  get(snackbarName){
-    return this._pendingSnackbars.get(snackbarName);
-  }
-
-  /**
-   * makes a custome offline snackbar, that appears when
-   * network connection is lost, and disappears when
-   * network connection is back again
-   */
-  _makeCustomeOfflineSnackbar(){
-    /* Showing offline message when client is offline */
-    window.addEventListener('offline', () => {
-      this.make(OFFLINE_SNACK);
-      this.get(OFFLINE_SNACK.name).prioritize = true;
-      this.show(OFFLINE_SNACK.name);
-    });
-
-
-    /* Removing message when client is offline */
-    window.addEventListener('online', () => {
-      if(this._pendingSnackbars.has(OFFLINE_SNACK.name) &&
-         this._visibleSnackbar.name === OFFLINE_SNACK.name) {
-
-        this._visibleSnackbar.hide();
-        this._visibleSnackbar = null;
-        this._pendingSnackbars.delete(OFFLINE_SNACK.name);
-      }
-    });
-  }
 }
