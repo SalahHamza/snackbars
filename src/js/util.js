@@ -1,12 +1,10 @@
-
-
 /**
  *
  * @param {Array} arr - array to check for item
  * @param {String} propName - the targeted property name
  * @param {*} value - value to check for
  */
-export function hasItem(arr, propName, value) {
+export const hasItem = (arr, propName, value) => {
   if(!Array.isArray(arr)) throw new Error('Array was not provided.');
   /* stringifying the property name */
   propName = propName.toString();
@@ -16,4 +14,12 @@ export function hasItem(arr, propName, value) {
     }
   }
   return false;
+}
+
+/**
+ *
+ * @param {String} hexColorString - Hex string to check (e.g. #FF00AA - not case sentsitive)
+ */
+export const isHexColor = hexColorString => {
+  return /^#[0-9A-F]{6}$/i.test(hexColorString);
 }

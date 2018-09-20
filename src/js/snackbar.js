@@ -1,3 +1,4 @@
+import { isHexColor } from "./util";
 
 export default class Snackbar {
 
@@ -54,10 +55,14 @@ export default class Snackbar {
    * @param {Function} callback - Function to call when action called (button click)
    * @param {Boolean} hideManually - hide the snackbar manually if 'true'
    */
-  setAction({name, handler, dismissOnAction = true}){
+  setAction({name, handler, dismissOnAction = true, textColor}){
     const buttonElem = document.createElement('button');
     buttonElem.classList.add('snackbar-button');
     buttonElem.innerText = name;
+    /* setting action button color if given */
+    if(isHexColor(textColor)) {
+      buttonElem.style.color = textColor;
+    }
 
     /* Action Event */
     buttonElem.addEventListener('click', (event) => {

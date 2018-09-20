@@ -71,7 +71,7 @@ export default class Snackbars {
   /**
    *
    * @param {Object} snackbar - snackbar instance to add event to
-   * @param {*} gap - gap to show next snackbar
+   * @param {Number} gap - gap to show next snackbar in ms
    */
   addSnackbarHideEvent(snackbar, gap) {
     snackbar.container.addEventListener(`${snackbar.name}_hide`, () => {

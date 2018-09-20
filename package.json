@@ -4,7 +4,9 @@
   "description": "Costume snackbar that works like Snackbars in Android",
   "main": "snackbar.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "develop": "webpack --mode development --watch",
+    "build": "webpack --mode production",
+    "bundle": "rollup -c"
   },
   "author": "Salah Hamza",
   "license": "ISC",
@@ -20,5 +22,13 @@
   "bugs": {
     "url": "https://github.com/SalahHamza/snackbar/issues"
   },
-  "homepage": "https://github.com/SalahHamza/snackbar#readme"
+  "homepage": "https://github.com/SalahHamza/snackbar#readme",
+  "devDependencies": {
+    "@babel/core": "^7.1.0",
+    "@babel/plugin-syntax-dynamic-import": "^7.0.0",
+    "@babel/preset-env": "^7.1.0",
+    "rollup": "^0.66.1",
+    "rollup-plugin-babel": "^4.0.3",
+    "rollup-plugin-uglify": "^6.0.0"
+  }
 }
