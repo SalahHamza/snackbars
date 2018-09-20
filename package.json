@@ -1,11 +1,9 @@
 {
-  "name": "@salahhamza/snackbar",
-  "version": "2.0.0",
+  "name": "@salahhamza/snackbars",
+  "version": "1.0.0",
   "description": "Costume snackbar that works like Snackbars in Android",
-  "main": "snackbar.js",
+  "main": "lib/snackbars.js",
   "scripts": {
-    "develop": "webpack --mode development --watch",
-    "build": "webpack --mode production",
     "bundle": "rollup -c"
   },
   "author": "Salah Hamza",
@@ -30,5 +28,9 @@
     "rollup": "^0.66.1",
     "rollup-plugin-babel": "^4.0.3",
     "rollup-plugin-uglify": "^6.0.0"
-  }
+  },
+  "directories": {
+    "lib": "lib"
+  },
+  "dependencies": {}
 }
