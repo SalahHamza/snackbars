@@ -2,7 +2,7 @@
   "name": "@salahhamza/snackbars",
   "version": "1.1.0",
   "description": "Costume snackbar that works like Snackbars in Android",
-  "main": "lib/snackbars.js",
+  "main": "lib/main.min.js",
   "scripts": {
     "bundle": "rollup -c"
   },
