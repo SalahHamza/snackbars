@@ -29,7 +29,6 @@ export default class Snackbar {
   }
 
 
-
   /**
    * Creates snackbar container and sets message
    */

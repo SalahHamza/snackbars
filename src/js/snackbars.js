@@ -6,24 +6,33 @@ const OFFLINE_SNACK = {
   message: 'You are currently offline'
 }
 
+const ONLINE_SNACK = {
+  name: 'online',
+  message: 'You are back online'
+}
+
 export default class Snackbars {
   /**
    *
    * @param {Object} container - DOM element to append snackbar to
    * @param {Boolean} makeCustomeOfflineSnackbar - If true (default), makes makes custome snackbar
    */
-  constructor(container, makeOfflineSnackbar = false) {
+  constructor(container, makeNetworkStatusSnackbar = false) {
     this.container = container;
     this.isActive = false;
     this.queue = [];
 
-    if(makeOfflineSnackbar) {
+    if(makeNetworkStatusSnackbar) {
       /* Showing offline message when client is offline */
       window.addEventListener('offline', () => {
+        this.queue = this.queue.filter(snack => snack.name !== ONLINE_SNACK.name);
         this.show(OFFLINE_SNACK);
       });
+
+      /* showing online message when client is back online */
       window.addEventListener('online', () => {
         this.queue = this.queue.filter(snack => snack.name !== OFFLINE_SNACK.name);
+        this.show(ONLINE_SNACK);
       });
     }
 
