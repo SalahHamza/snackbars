@@ -3,12 +3,13 @@ import {hasItem} from './util';
 
 const OFFLINE_SNACK = {
   name: 'offline',
-  message: 'You are currently offline'
+  message: 'Unable to connect. Retrying...'
 }
 
 const ONLINE_SNACK = {
   name: 'online',
-  message: 'You are back online'
+  message: 'You are back online',
+  duration: 3200
 }
 
 export default class Snackbars {
@@ -19,7 +20,7 @@ export default class Snackbars {
    */
   constructor(container, makeNetworkStatusSnackbar = false) {
     this.container = container;
-    this.isActive = false;
+    this.visibleSnackbar = null;
     this.queue = [];
 
     if(makeNetworkStatusSnackbar) {
@@ -32,6 +33,12 @@ export default class Snackbars {
       /* showing online message when client is back online */
       window.addEventListener('online', () => {
         this.queue = this.queue.filter(snack => snack.name !== OFFLINE_SNACK.name);
+        /* if current visible snackbar is offline
+        snackbar, hide it when navigator is online */
+        if(this.visibleSnackbar && this.visibleSnackbar.name === OFFLINE_SNACK.name) {
+          this.visibleSnackbar.hide();
+          this.visibleSnackbar = null;
+        }
         this.show(ONLINE_SNACK);
       });
     }
@@ -43,7 +50,8 @@ export default class Snackbars {
    * @param {Object} configObj - snackbar configuration object
    */
   show(configObj) {
-    const {name, message, action, duration, dismissOnAction, gap = 500} = configObj;
+    const {name, message, actions = [], duration, gap = 500} = configObj;
+    debugger;
     /* checking if the two most important properties are present */
     if(!message || !name){
       throw new Error('Snackbar name or message weren\'t provided.');
@@ -57,21 +65,32 @@ export default class Snackbars {
             consecutively
           and we add new snackbar to the queue and return.
      */
-    if(this.isActive) {
+    if(this.visibleSnackbar) {
       if(hasItem(this.queue, 'name', name)) return;
       this.queue.push(configObj);
       return;
     }
 
     /* making new snackbar and adding it to pending snackbars */
-    const snackbar = new Snackbar(name, message, duration, dismissOnAction);
-    if(action){
-      /* setting snackbar action */
+    const snackbar = new Snackbar(name, message, duration);
+
+    /* setting snackbar actions */
+    for(const action of actions) {
       snackbar.setAction(action);
     }
+
+    /* If no duration is given & no actions
+      are given create a dismiss action */
+    if(!duration && !actions.length) {
+      snackbar.setAction({ name: 'dismiss' });
+    }
+
+    /* show snackbar */
     snackbar.show(this.container);
+
     /* we put that we currently have a visible snackbar */
-    this.isActive = true;
+    this.visibleSnackbar = snackbar;
+
     /* we remove the first item of the queue if it exist */
     this.queue.shift();
     this.addSnackbarHideEvent(snackbar, gap);
@@ -80,11 +99,11 @@ export default class Snackbars {
   /**
    *
    * @param {Object} snackbar - snackbar instance to add event to
-   * @param {Number} gap - gap to show next snackbar in ms
+   * @param {number} gap - gap to show next snackbar in ms
    */
   addSnackbarHideEvent(snackbar, gap) {
     snackbar.container.addEventListener(`${snackbar.name}_hide`, () => {
-      this.isActive = false;
+      this.visibleSnackbar = null;
       if(this.queue.length) {
         setTimeout(() => {
           this.show(this.queue[0]);

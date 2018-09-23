@@ -1,16 +1,25 @@
 /*============= Snackbar =============*/
+.snackbar,
+.snackbutts,
+.snackbar-message {
+  box-sizing: border-box;
+}
+
 
 .snackbar {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
   position: fixed;
   visibility: hidden;
-  box-sizing: border-box;
+  padding: 8px 16px;
+  min-height: 48px;
   bottom: 0;
   left: 0;
   right: 0;
-  z-index: 3;
+  z-index: 999;
   background-color: rgba(0,0,0,0.9);
-  padding: 14px 0 14px 24px;
   transform: translateY(100px);
   will-change: transform;
   transition: visibility 0.3s, transform 0.3s;
@@ -28,7 +37,7 @@
     left: 24px;
     width: fit-content;
     border-radius: 2px;
-    min-width: 300px;
+    min-width: 344px;
     max-width: 600px
   }
 }
@@ -37,17 +46,23 @@
 .snackbar-message {
   flex: 1;
   color: white;
-  margin: 0 48px 0 0;
+  min-width: 45%;
+  margin: 0 16px 0 0;
 }
 
 /*============= button =============*/
+
 .snackbar-button {
-  margin: 0 24px 0 0;
-  float: right;
+  margin: 0 16px 0 0;
+  padding: 8px;
   color: tomato;
   text-transform: uppercase;
   background-color: transparent;
   border: 0;
   letter-spacing: 1px;
   cursor: pointer;
+}
+
+.snackbar-button:last-of-type {
+  margin: 0;
 }

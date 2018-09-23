@@ -4,22 +4,23 @@ export default class Snackbar {
 
   /**
    *
-   * @param {String} name - Snackbar name
-   * @param {String} message - Snackbar message
-   * @param {Number} duration - Snackbar lifetime in miliseconds
+   * @param {string} name - Snackbar name
+   * @param {string} message - Snackbar message
+   * @param {number} duration - Snackbar lifetime in miliseconds
    */
-	constructor(name, message, duration = 3200) {
+	constructor(name, message, duration) {
     this.name = name;
     this.message = message;
-    this.duration = duration;
 
     /* creating snackbar */
     this.create();
 
-    /* set a timeout to hide snackbar */
-    this.hideTimeout = setTimeout(() => {
-      this.hide();
-    }, this.duration);
+    if(duration) {
+      /* set a timeout to hide snackbar */
+      this.hideTimeout = setTimeout(() => {
+        this.hide();
+      }, duration);
+    }
 
     /* adding event, to check if snackbar was deleted */
     const eventName = `${this.name}_hide`;
@@ -55,6 +56,13 @@ export default class Snackbar {
    * @param {Boolean} hideManually - hide the snackbar manually if 'true'
    */
   setAction({name, handler, dismissOnAction = true, textColor}){
+    let buttonsContainer = this.container.querySelector('.snackbutts');
+    if(!buttonsContainer) {
+      buttonsContainer = document.createElement('div');
+      buttonsContainer.classList.add('snackbutts');
+      this.container.appendChild(buttonsContainer);
+    }
+
     const buttonElem = document.createElement('button');
     buttonElem.classList.add('snackbar-button');
     buttonElem.innerText = name;
@@ -74,7 +82,7 @@ export default class Snackbar {
       }
     });
 
-    this.container.appendChild(buttonElem);
+    buttonsContainer.appendChild(buttonElem);
 
     return this;
   }
