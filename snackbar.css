@@ -1,10 +1,15 @@
+:root {
+  --snackbar-background-color: #202020;
+  --snackbar-text-color: #f1f1f1;
+  --snackbar-default-button-color: #ff6347;
+}
+
 /*============= Snackbar =============*/
 .snackbar,
 .snackbutts,
 .snackbar-message {
   box-sizing: border-box;
 }
-
 
 .snackbar {
   display: flex;
@@ -15,14 +20,16 @@
   visibility: hidden;
   padding: 8px 16px;
   min-height: 48px;
+  font-size: 14px;
   bottom: 0;
   left: 0;
   right: 0;
   z-index: 999;
-  background-color: rgba(0,0,0,0.9);
+  background-color: var(--snackbar-background-color, #202020);
   transform: translateY(100px);
   will-change: transform;
   transition: visibility 0.3s, transform 0.3s;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 .snackbar-visible {
@@ -45,7 +52,7 @@
 /*============= message =============*/
 .snackbar-message {
   flex: 1;
-  color: white;
+  color: var(--snackbar-text-color, #f1f1f1);
   min-width: 45%;
   margin: 0 16px 0 0;
 }
@@ -55,7 +62,7 @@
 .snackbar-button {
   margin: 0 16px 0 0;
   padding: 8px;
-  color: tomato;
+  color: var(--snackbar-default-button-color, #ff6347);
   text-transform: uppercase;
   background-color: transparent;
   border: 0;
