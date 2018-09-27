@@ -51,7 +51,6 @@ export default class Snackbars {
    */
   show(configObj) {
     const {name, message, actions = [], duration, gap = 500} = configObj;
-    debugger;
     /* checking if the two most important properties are present */
     if(!message || !name){
       throw new Error('Snackbar name or message weren\'t provided.');
