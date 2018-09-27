@@ -2,7 +2,7 @@
   "name": "@salahhamza/snackbars",
   "version": "2.0.2",
   "description": "Costume snackbar that works like Snackbars in Android",
-  "main": "lib/main.min.js",
+  "main": "lib/index.js",
   "scripts": {
     "bundle": "rollup -c"
   },
@@ -24,12 +24,16 @@
   "devDependencies": {
     "@babel/core": "^7.1.0",
     "@babel/preset-env": "^7.1.0",
+    "autoprefixer": "^9.1.5",
     "rollup": "^0.66.1",
     "rollup-plugin-babel": "^4.0.3",
-    "rollup-plugin-uglify": "^6.0.0"
+    "rollup-plugin-postcss": "^1.6.2"
   },
   "directories": {
     "lib": "lib"
   },
+  "files": [
+    "/lib"
+  ],
   "dependencies": {}
 }
