@@ -16,7 +16,7 @@ export default class Snackbars {
   /**
    *
    * @param {Object} container - DOM element to append snackbar to
-   * @param {Boolean} makeCustomeOfflineSnackbar - If true (default), makes makes custome snackbar
+   * @param {Boolean} makeCustomeOfflineSnackbar - If true (default), makes custome snackbar
    */
   constructor(container, makeNetworkStatusSnackbar = false) {
     this.container = container;

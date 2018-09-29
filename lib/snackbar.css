@@ -26,15 +26,19 @@
   right: 0;
   z-index: 999;
   background-color: var(--snackbar-background-color, #202020);
-  transform: translateY(100px);
+  -webkit-transform: translateY(100px);
+          transform: translateY(100px);
   will-change: transform;
+  transition: visibility 0.3s, -webkit-transform 0.3s;
   transition: visibility 0.3s, transform 0.3s;
+  transition: visibility 0.3s, transform 0.3s, -webkit-transform 0.3s;
   font-family: Arial, Helvetica, sans-serif;
 }
 
 .snackbar-visible {
   visibility: visible;
-  transform: none;
+  -webkit-transform: none;
+          transform: none;
 }
 
 /* media query */
@@ -42,6 +46,8 @@
   .snackbar {
     bottom: 16px;
     left: 24px;
+    width: -webkit-fit-content;
+    width: -moz-fit-content;
     width: fit-content;
     border-radius: 2px;
     min-width: 368px;
