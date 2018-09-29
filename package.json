@@ -1,6 +1,6 @@
 {
   "name": "@salahhamza/snackbars",
-  "version": "2.1.2",
+  "version": "2.1.3",
   "description": "Costume snackbar that works like Snackbars in Android",
   "main": "lib/index.js",
   "scripts": {
