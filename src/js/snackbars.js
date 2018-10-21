@@ -49,7 +49,6 @@ export default class Snackbars {
     if(this.visibleSnackbar) {
       if(hasItem(this.queue, 'name', name)) return;
       this.queue.push(configObj);
-      console.log(this.queue);
       return;
     }
 
@@ -116,15 +115,6 @@ export default class Snackbars {
       });
     }
 
-    this.container.innerHTML += `<div
-      class="snackbar"
-      aria-live="assertive"
-      aria-atomic="true"
-      aria-hidden="true">
-      <p class="snackbar-message"></p>
-      <div class="snackbutts"></div>
-    </div>`;
-    this.snackbarElem = document.querySelector('.snackbar');
   }
 
 }
