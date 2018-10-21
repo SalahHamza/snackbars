@@ -114,7 +114,6 @@ export default class Snackbars {
         this.show(ONLINE_SNACK);
       });
     }
-
   }
 
 }
