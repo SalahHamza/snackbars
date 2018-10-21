@@ -16,32 +16,13 @@ export default class Snackbars {
   /**
    *
    * @param {Object} container - DOM element to append snackbar to
-   * @param {Boolean} makeCustomeOfflineSnackbar - If true (default), makes custome snackbar
+   * @param {Boolean} makeNetworkStatusSnackbar - If true (default), makes custome snackbar
    */
   constructor(container, makeNetworkStatusSnackbar = false) {
     this.container = container;
     this.visibleSnackbar = null;
+    this.makeNetworkStatusSnackbar = makeNetworkStatusSnackbar;
     this.queue = [];
-
-    if(makeNetworkStatusSnackbar) {
-      /* Showing offline message when client is offline */
-      window.addEventListener('offline', () => {
-        this.queue = this.queue.filter(snack => snack.name !== ONLINE_SNACK.name);
-        this.show(OFFLINE_SNACK);
-      });
-
-      /* showing online message when client is back online */
-      window.addEventListener('online', () => {
-        this.queue = this.queue.filter(snack => snack.name !== OFFLINE_SNACK.name);
-        /* if current visible snackbar is offline
-        snackbar, hide it when navigator is online */
-        if(this.visibleSnackbar && this.visibleSnackbar.name === OFFLINE_SNACK.name) {
-          this.visibleSnackbar.hide();
-          this.visibleSnackbar = null;
-        }
-        this.show(ONLINE_SNACK);
-      });
-    }
 
   }
 
@@ -109,6 +90,29 @@ export default class Snackbars {
         }, gap);
       }
     });
+  }
+
+
+  init() {
+    if(this.makeNetworkStatusSnackbar) {
+      /* Showing offline message when client is offline */
+      window.addEventListener('offline', () => {
+        this.queue = this.queue.filter(snack => snack.name !== ONLINE_SNACK.name);
+        this.show(OFFLINE_SNACK);
+      });
+
+      /* showing online message when client is back online */
+      window.addEventListener('online', () => {
+        this.queue = this.queue.filter(snack => snack.name !== OFFLINE_SNACK.name);
+        /* if current visible snackbar is offline
+        snackbar, hide it when navigator is online */
+        if(this.visibleSnackbar && this.visibleSnackbar.name === OFFLINE_SNACK.name) {
+          this.visibleSnackbar.hide();
+          this.visibleSnackbar = null;
+        }
+        this.show(ONLINE_SNACK);
+      });
+    }
   }
 
 }
