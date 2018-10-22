@@ -19,12 +19,14 @@ export default class Snackbars {
    * @param {Boolean} makeNetworkStatusSnackbar - If true (default), makes custome snackbar
    */
   constructor(container, makeNetworkStatusSnackbar = false) {
-    this.container = container;
     this.visibleSnackbar = null;
     this.makeNetworkStatusSnackbar = makeNetworkStatusSnackbar;
     this.queue = [];
 
-    this.init();
+    window.addEventListener('DOMContentLoaded', event => {
+      this.container = container || document.body;
+      this.init();
+    });
   }
 
   /**
