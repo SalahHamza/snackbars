@@ -20,12 +20,11 @@ export default class Snackbars {
    */
   constructor(container, makeNetworkStatusSnackbar = false) {
     this.visibleSnackbar = null;
-    this.makeNetworkStatusSnackbar = makeNetworkStatusSnackbar;
     this.queue = [];
 
     window.addEventListener('DOMContentLoaded', event => {
       this.container = container || document.body;
-      this.init();
+      this.init(makeNetworkStatusSnackbar);
     });
   }
 
@@ -96,8 +95,8 @@ export default class Snackbars {
   }
 
 
-  init() {
-    if(this.makeNetworkStatusSnackbar) {
+  init(makeNetworkStatusSnackbar) {
+    if(makeNetworkStatusSnackbar) {
       /* Showing offline message when client is offline */
       window.addEventListener('offline', () => {
         this.queue = this.queue.filter(snack => snack.name !== ONLINE_SNACK.name);
