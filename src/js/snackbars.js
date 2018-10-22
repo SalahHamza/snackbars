@@ -56,6 +56,7 @@ export default class Snackbars {
     /* making new snackbar and adding it to pending snackbars */
     const snackbar = new Snackbar(name, message, duration, this._snackbarSkeleton);
 
+
     /* setting snackbar actions */
     for(const action of actions) {
       snackbar.setAction(action);
