@@ -7,10 +7,12 @@ export default class Snackbar {
    * @param {string} name - Snackbar name
    * @param {string} message - Snackbar message
    * @param {number} duration - Snackbar lifetime in miliseconds
+   * @param {object} container - The snackbar skeleton
    */
-	constructor(name, message, duration) {
+	constructor(name, message, duration, container) {
     this.name = name;
     this.message = message;
+    this.container = container;
 
     /* creating snackbar */
     this.create();
@@ -34,17 +36,9 @@ export default class Snackbar {
    * Creates snackbar container and sets message
    */
 	create(){
-
-		/* create snackbar Container */
-    this.container = document.createElement('div');
-    this.container.classList.add('snackbar');
-
     /* create snackbar message */
-    const messageElem = document.createElement('p');
-		messageElem.classList.add('snackbar-message');
+    const messageElem = this.container.querySelector('.snackbar-message');
     messageElem.textContent = this.message;
-    this.container.appendChild(messageElem);
-
     // returning 'this' for chaining
     return this;
   }
@@ -57,10 +51,17 @@ export default class Snackbar {
    */
   setAction({name, handler, dismissOnAction = true, textColor}){
     let buttonsContainer = this.container.querySelector('.snackbutts');
+
+    // creating a buttons container if doesn't exist
     if(!buttonsContainer) {
       buttonsContainer = document.createElement('div');
       buttonsContainer.classList.add('snackbutts');
       this.container.appendChild(buttonsContainer);
+    }
+
+    // removing all snackbar buttons if they exist
+    while (buttonsContainer.firstChild) {
+      buttonsContainer.removeChild(buttonsContainer.firstChild);
     }
 
     const buttonElem = document.createElement('button');
