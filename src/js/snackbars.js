@@ -106,7 +106,6 @@ export default class Snackbars {
     this._snackbarSkeleton = document.querySelector('.snackbar');
   }
 
-
   _init(makeNetworkStatusSnackbar) {
 
     if(makeNetworkStatusSnackbar) {
