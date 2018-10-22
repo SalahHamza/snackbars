@@ -94,8 +94,20 @@ export default class Snackbars {
     });
   }
 
+  _createSnackbarSkeleton() {
+    this.container.innerHTML += `<div
+      class="snackbar"
+      aria-live="assertive"
+      aria-atomic="true"
+      aria-hidden="true">
+      <p class="snackbar-message"></p>
+      <div class="snackbutts"></div>
+    </div>`;
+    this._snackbarSkeleton = document.querySelector('.snackbar');
+  }
 
   init(makeNetworkStatusSnackbar) {
+
     if(makeNetworkStatusSnackbar) {
       /* Showing offline message when client is offline */
       window.addEventListener('offline', () => {
