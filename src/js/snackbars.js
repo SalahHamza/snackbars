@@ -24,7 +24,7 @@ export default class Snackbars {
 
     window.addEventListener('DOMContentLoaded', event => {
       this.container = container || document.body;
-      this.init(makeNetworkStatusSnackbar);
+      this._init(makeNetworkStatusSnackbar);
     });
   }
 
@@ -106,7 +106,8 @@ export default class Snackbars {
     this._snackbarSkeleton = document.querySelector('.snackbar');
   }
 
-  init(makeNetworkStatusSnackbar) {
+
+  _init(makeNetworkStatusSnackbar) {
 
     if(makeNetworkStatusSnackbar) {
       /* Showing offline message when client is offline */
