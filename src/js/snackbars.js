@@ -22,10 +22,16 @@ export default class Snackbars {
     this.visibleSnackbar = null;
     this.queue = [];
 
-    window.addEventListener('DOMContentLoaded', event => {
+    // catch if 'DOMContentLoaded' already fired
+    if (document.readyState === "loading") {
+      window.addEventListener('DOMContentLoaded', event => {
+        this.container = container || document.body;
+        this._init(makeNetworkStatusSnackbar);
+      });
+    } else {
       this.container = container || document.body;
       this._init(makeNetworkStatusSnackbar);
-    });
+    }
   }
 
   /**
