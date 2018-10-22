@@ -39,6 +39,13 @@ export default class Snackbar {
     /* create snackbar message */
     const messageElem = this.container.querySelector('.snackbar-message');
     messageElem.textContent = this.message;
+
+    this._buttonsContainer = this.container.querySelector('.snackbutts');
+
+    // removing all snackbar buttons if they exist
+    while (this._buttonsContainer.firstChild) {
+      this._buttonsContainer.removeChild(this._buttonsContainer.firstChild);
+    }
     // returning 'this' for chaining
     return this;
   }
@@ -50,19 +57,6 @@ export default class Snackbar {
    * @param {Boolean} hideManually - hide the snackbar manually if 'true'
    */
   setAction({name, handler, dismissOnAction = true, textColor}){
-    let buttonsContainer = this.container.querySelector('.snackbutts');
-
-    // creating a buttons container if doesn't exist
-    if(!buttonsContainer) {
-      buttonsContainer = document.createElement('div');
-      buttonsContainer.classList.add('snackbutts');
-      this.container.appendChild(buttonsContainer);
-    }
-
-    // removing all snackbar buttons if they exist
-    while (buttonsContainer.firstChild) {
-      buttonsContainer.removeChild(buttonsContainer.firstChild);
-    }
 
     const buttonElem = document.createElement('button');
     buttonElem.classList.add('snackbar-button');
@@ -83,7 +77,7 @@ export default class Snackbar {
       }
     });
 
-    buttonsContainer.appendChild(buttonElem);
+    this._buttonsContainer.appendChild(buttonElem);
 
     return this;
   }
@@ -92,11 +86,8 @@ export default class Snackbar {
    *
    * @param {Object} nodeToAppendTo - DOM object to append snackbar to
    */
-  show(nodeToAppendTo){
-    nodeToAppendTo.appendChild(this.container);
-    setTimeout(() => {
-      this.container.classList.add('snackbar-visible');
-    }, 250);
+  show(){
+    this.container.classList.add('snackbar-visible');
   }
 
   /**
@@ -104,9 +95,6 @@ export default class Snackbar {
    */
   hide(){
     this.container.classList.remove('snackbar-visible');
-    setTimeout(() => {
-      this.container.parentNode.removeChild(this.container);
-    }, 250);
     /* dispatch an event that current snackbar was hidden */
     this.container.dispatchEvent(this._hideEvent);
   }
