@@ -54,7 +54,7 @@ export default class Snackbars {
     }
 
     /* making new snackbar and adding it to pending snackbars */
-    const snackbar = new Snackbar(name, message, duration);
+    const snackbar = new Snackbar(name, message, duration, this._snackbarSkeleton);
 
     /* setting snackbar actions */
     for(const action of actions) {
@@ -107,6 +107,8 @@ export default class Snackbars {
   }
 
   _init(makeNetworkStatusSnackbar) {
+    // creating snackbar skeleton
+    this._createSnackbarSkeleton();
 
     if(makeNetworkStatusSnackbar) {
       /* Showing offline message when client is offline */
