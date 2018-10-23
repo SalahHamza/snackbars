@@ -88,6 +88,7 @@ export default class Snackbar {
    */
   show(){
     this.container.classList.add('snackbar-visible');
+    this.container.setAttribute('aria-hidden', false);
   }
 
   /**
@@ -95,6 +96,7 @@ export default class Snackbar {
    */
   hide(){
     this.container.classList.remove('snackbar-visible');
+    this.container.setAttribute('aria-hidden', true);
     /* dispatch an event that current snackbar was hidden */
     this.container.dispatchEvent(this._hideEvent);
   }
