@@ -75,7 +75,7 @@ export default class Snackbars {
     }
 
     /* show snackbar */
-    snackbar.show(this.container);
+    snackbar.show();
 
     /* we put that we currently have a visible snackbar */
     this.visibleSnackbar = snackbar;
