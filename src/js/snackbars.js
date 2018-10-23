@@ -3,7 +3,7 @@ import {hasItem} from './util';
 
 const OFFLINE_SNACK = {
   name: 'offline',
-  message: 'Unable to connect. Retrying...'
+  message: 'You seem to be offline'
 }
 
 const ONLINE_SNACK = {
