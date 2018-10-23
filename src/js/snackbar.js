@@ -9,7 +9,7 @@ export default class Snackbar {
    * @param {number} duration - Snackbar lifetime in miliseconds
    * @param {object} container - The snackbar skeleton
    */
-	constructor(name, message, duration, container) {
+	constructor({name, message, duration, container}) {
     this.name = name;
     this.message = message;
     this.container = container;
