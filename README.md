@@ -37,7 +37,7 @@ snackbars.show({
 ### Snackbars(container[, makeCustomeOfflineSnackbar])
 
 Constructor, takes 2 parameters:
-* **`container`**: the DOM element to which the snackbars are appended to.
+* **`container`**: the DOM element to which the snackbars are appended to. defaults to `document.body`.
 * **`makeCustomeOfflineSnackbar`**: makes **offline** that show up when there is no interne access (hides when internet access is back) and **online** snackbar that show up when internet is back up. defaults to `false`.
 
 #### show(options)
