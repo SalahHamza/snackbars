@@ -76,7 +76,7 @@ export default class Snackbars {
 
     /* we remove the first item of the queue if it exist */
     this.queue.shift();
-    this.addSnackbarHideEvent(snackbar, gap);
+    this._addSnackbarHideEvent(snackbar, gap);
   }
 
   /**
