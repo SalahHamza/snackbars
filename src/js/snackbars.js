@@ -104,7 +104,7 @@ export default class Snackbars {
   _createSnackbarSkeleton() {
     this.container.innerHTML += `<div
       class="snackbar"
-      aria-live="assertive"
+      aria-live="polite"
       aria-atomic="true"
       aria-hidden="true">
       <p class="snackbar-message"></p>
