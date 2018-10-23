@@ -127,7 +127,10 @@ export default class Snackbars {
           this.visibleSnackbar.hide();
           this.visibleSnackbar = null;
         }
-        this.show(ONLINE_SNACK);
+        // giving the offline snackbar enough time to hide
+        setTimeout(() => {
+          this.show(ONLINE_SNACK);
+        }, 500);
       });
     }
   }
