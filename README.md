@@ -45,7 +45,6 @@ Constructor, takes 2 parameters:
 Makes/adds a new snackbar with the specified options to the queue.
 
 ##### options (Object)
-{name, message, actions = [], duration, gap = 500}
 
 * **name** (required): `String` - snackbar name to handle snackbar correctly.
 * **message** (required): `String` - message to show in snackbar.
