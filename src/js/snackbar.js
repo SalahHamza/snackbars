@@ -9,10 +9,12 @@ export default class Snackbar {
    * @param {number} duration - Snackbar lifetime in miliseconds
    * @param {object} container - The snackbar skeleton
    */
-	constructor({name, message, duration, container}) {
+	constructor({name, message, duration, container, actions}) {
     this.name = name;
     this.message = message;
     this.container = container;
+    this.actions = actions;
+    this.duration = duration;
 
     /* creating snackbar */
     this.create();
@@ -45,6 +47,17 @@ export default class Snackbar {
     // removing all snackbar buttons if they exist
     while (this._buttonsContainer.firstChild) {
       this._buttonsContainer.removeChild(this._buttonsContainer.firstChild);
+    }
+
+    /* setting snackbar actions */
+    for(const action of this.actions) {
+      this.setAction(action);
+    }
+
+    /* If no duration is given & no actions
+      are given create a dismiss action */
+    if(!this.duration && !this.actions.length) {
+      this.setAction({ name: 'dismiss' });
     }
     // returning 'this' for chaining
     return this;

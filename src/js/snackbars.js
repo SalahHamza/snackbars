@@ -64,20 +64,9 @@ export default class Snackbars {
       name,
       message,
       duration,
-      container: this._snackbarSkeleton
+      container: this._snackbarSkeleton,
+      actions
     });
-
-
-    /* setting snackbar actions */
-    for(const action of actions) {
-      snackbar.setAction(action);
-    }
-
-    /* If no duration is given & no actions
-      are given create a dismiss action */
-    if(!duration && !actions.length) {
-      snackbar.setAction({ name: 'dismiss' });
-    }
 
     /* show snackbar */
     snackbar.show();
