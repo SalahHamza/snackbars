@@ -61,6 +61,7 @@ export default class Snackbar {
     const buttonElem = document.createElement('button');
     buttonElem.classList.add('snackbar-button');
     buttonElem.innerText = name;
+    buttonElem.setAttribute('aria-label', `${name} button`);
     /* setting action button color if given */
     if(isHexColor(textColor)) {
       buttonElem.style.color = textColor;
