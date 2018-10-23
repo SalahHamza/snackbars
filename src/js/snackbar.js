@@ -61,7 +61,6 @@ export default class Snackbar {
     const buttonElem = document.createElement('button');
     buttonElem.classList.add('snackbar-button');
     buttonElem.innerText = name;
-    buttonElem.setAttribute('aria-label', `${name} button`);
     /* setting action button color if given */
     if(isHexColor(textColor)) {
       buttonElem.style.color = textColor;
@@ -90,6 +89,10 @@ export default class Snackbar {
   show(){
     this.container.classList.add('snackbar-visible');
     this.container.setAttribute('aria-hidden', false);
+    // giving chance to the element to render first
+    setTimeout(() => {
+      this.container.focus();
+    }, 250);
   }
 
   /**
