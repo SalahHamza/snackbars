@@ -3,7 +3,7 @@ import {hasItem} from './util';
 
 const OFFLINE_SNACK = {
   name: 'offline',
-  message: 'Unable to connect. Retrying...'
+  message: 'You seem to be offline'
 }
 
 const ONLINE_SNACK = {
@@ -19,12 +19,19 @@ export default class Snackbars {
    * @param {Boolean} makeNetworkStatusSnackbar - If true (default), makes custome snackbar
    */
   constructor(container, makeNetworkStatusSnackbar = false) {
-    this.container = container;
     this.visibleSnackbar = null;
-    this.makeNetworkStatusSnackbar = makeNetworkStatusSnackbar;
     this.queue = [];
 
-    this.init();
+    // catch if 'DOMContentLoaded' already fired
+    if (document.readyState === "loading") {
+      window.addEventListener('DOMContentLoaded', event => {
+        this.container = container || document.body;
+        this._init(makeNetworkStatusSnackbar);
+      });
+    } else {
+      this.container = container || document.body;
+      this._init(makeNetworkStatusSnackbar);
+    }
   }
 
   /**
@@ -53,28 +60,23 @@ export default class Snackbars {
     }
 
     /* making new snackbar and adding it to pending snackbars */
-    const snackbar = new Snackbar(name, message, duration);
-
-    /* setting snackbar actions */
-    for(const action of actions) {
-      snackbar.setAction(action);
-    }
-
-    /* If no duration is given & no actions
-      are given create a dismiss action */
-    if(!duration && !actions.length) {
-      snackbar.setAction({ name: 'dismiss' });
-    }
+    const snackbar = new Snackbar({
+      name,
+      message,
+      duration,
+      container: this._snackbarSkeleton,
+      actions
+    });
 
     /* show snackbar */
-    snackbar.show(this.container);
+    snackbar.show();
 
     /* we put that we currently have a visible snackbar */
     this.visibleSnackbar = snackbar;
 
     /* we remove the first item of the queue if it exist */
     this.queue.shift();
-    this.addSnackbarHideEvent(snackbar, gap);
+    this._addSnackbarHideEvent(snackbar, gap);
   }
 
   /**
@@ -82,7 +84,7 @@ export default class Snackbars {
    * @param {Object} snackbar - snackbar instance to add event to
    * @param {number} gap - gap to show next snackbar in ms
    */
-  addSnackbarHideEvent(snackbar, gap) {
+  _addSnackbarHideEvent(snackbar, gap) {
     snackbar.container.addEventListener(`${snackbar.name}_hide`, () => {
       this.visibleSnackbar = null;
       if(this.queue.length) {
@@ -93,9 +95,23 @@ export default class Snackbars {
     });
   }
 
+  _createSnackbarSkeleton() {
+    this.container.innerHTML += `<div
+      class="snackbar"
+      aria-live="polite"
+      aria-atomic="true"
+      aria-hidden="true">
+      <p class="snackbar-message"></p>
+      <div class="snackbutts"></div>
+    </div>`;
+    this._snackbarSkeleton = document.querySelector('.snackbar');
+  }
 
-  init() {
-    if(this.makeNetworkStatusSnackbar) {
+  _init(makeNetworkStatusSnackbar) {
+    // creating snackbar skeleton
+    this._createSnackbarSkeleton();
+
+    if(makeNetworkStatusSnackbar) {
       /* Showing offline message when client is offline */
       window.addEventListener('offline', () => {
         this.queue = this.queue.filter(snack => snack.name !== ONLINE_SNACK.name);
@@ -111,7 +127,10 @@ export default class Snackbars {
           this.visibleSnackbar.hide();
           this.visibleSnackbar = null;
         }
-        this.show(ONLINE_SNACK);
+        // giving the offline snackbar enough time to hide
+        setTimeout(() => {
+          this.show(ONLINE_SNACK);
+        }, 500);
       });
     }
   }

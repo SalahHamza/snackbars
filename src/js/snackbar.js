@@ -7,10 +7,14 @@ export default class Snackbar {
    * @param {string} name - Snackbar name
    * @param {string} message - Snackbar message
    * @param {number} duration - Snackbar lifetime in miliseconds
+   * @param {object} container - The snackbar skeleton
    */
-	constructor(name, message, duration) {
+	constructor({name, message, duration, container, actions}) {
     this.name = name;
     this.message = message;
+    this.container = container;
+    this.actions = actions;
+    this.duration = duration;
 
     /* creating snackbar */
     this.create();
@@ -34,17 +38,27 @@ export default class Snackbar {
    * Creates snackbar container and sets message
    */
 	create(){
-
-		/* create snackbar Container */
-    this.container = document.createElement('div');
-    this.container.classList.add('snackbar');
-
     /* create snackbar message */
-    const messageElem = document.createElement('p');
-		messageElem.classList.add('snackbar-message');
+    const messageElem = this.container.querySelector('.snackbar-message');
     messageElem.textContent = this.message;
-    this.container.appendChild(messageElem);
 
+    this._buttonsContainer = this.container.querySelector('.snackbutts');
+
+    // removing all snackbar buttons if they exist
+    while (this._buttonsContainer.firstChild) {
+      this._buttonsContainer.removeChild(this._buttonsContainer.firstChild);
+    }
+
+    /* setting snackbar actions */
+    for(const action of this.actions) {
+      this.setAction(action);
+    }
+
+    /* If no duration is given & no actions
+      are given create a dismiss action */
+    if(!this.duration && !this.actions.length) {
+      this.setAction({ name: 'dismiss' });
+    }
     // returning 'this' for chaining
     return this;
   }
@@ -56,12 +70,6 @@ export default class Snackbar {
    * @param {Boolean} hideManually - hide the snackbar manually if 'true'
    */
   setAction({name, handler, dismissOnAction = true, textColor}){
-    let buttonsContainer = this.container.querySelector('.snackbutts');
-    if(!buttonsContainer) {
-      buttonsContainer = document.createElement('div');
-      buttonsContainer.classList.add('snackbutts');
-      this.container.appendChild(buttonsContainer);
-    }
 
     const buttonElem = document.createElement('button');
     buttonElem.classList.add('snackbar-button');
@@ -82,7 +90,7 @@ export default class Snackbar {
       }
     });
 
-    buttonsContainer.appendChild(buttonElem);
+    this._buttonsContainer.appendChild(buttonElem);
 
     return this;
   }
@@ -91,10 +99,12 @@ export default class Snackbar {
    *
    * @param {Object} nodeToAppendTo - DOM object to append snackbar to
    */
-  show(nodeToAppendTo){
-    nodeToAppendTo.appendChild(this.container);
+  show(){
+    this.container.classList.add('snackbar-visible');
+    this.container.setAttribute('aria-hidden', false);
+    // giving chance to the element to render first
     setTimeout(() => {
-      this.container.classList.add('snackbar-visible');
+      this.container.focus();
     }, 250);
   }
 
@@ -103,9 +113,7 @@ export default class Snackbar {
    */
   hide(){
     this.container.classList.remove('snackbar-visible');
-    setTimeout(() => {
-      this.container.parentNode.removeChild(this.container);
-    }, 250);
+    this.container.setAttribute('aria-hidden', true);
     /* dispatch an event that current snackbar was hidden */
     this.container.dispatchEvent(this._hideEvent);
   }
