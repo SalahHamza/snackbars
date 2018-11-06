@@ -56,3 +56,7 @@ Makes/adds a new snackbar with the specified options to the queue.
 * **gap**: `Number` - gap between every snackbar and the other in milliseconds. defaults to **500** milliseconds.
 
 **Note**: If you don't provide actions or a duration a **dismiss** action will be made for you to hide the snackbar.
+
+## License
+
+**Snackbars** is a public domain work, dedicated using [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/). Feel free to do whatever you want with it.
