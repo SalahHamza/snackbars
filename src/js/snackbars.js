@@ -4,6 +4,7 @@ import {hasItem, onDOMContentLoadedOrAfter} from './util';
 // DEFAULTS
 const NETWORK_SNACKBARS_DURATION = 3200;
 const NETWORK_SNACKBARS_NAME_SUFFIX = '--default-snackbar';
+const DEFAULT_GAP = 500;
 
 const OFFLINE_SNACK = {
   name: 'offline'+NETWORK_SNACKBARS_NAME_SUFFIX,
@@ -40,7 +41,7 @@ export default class Snackbars {
    * @param {Object} configObj - snackbar configuration object
    */
   show(configObj) {
-    const {name, message, actions = [], duration, gap = 500} = configObj;
+    const {name, message, actions = [], duration, gap = DEFAULT_GAP} = configObj;
     /* checking if the two most important properties are present */
     if(!message || !name){
       throw new Error('Snackbar name or message weren\'t provided.');
@@ -132,7 +133,7 @@ export default class Snackbars {
         // giving the offline snackbar enough time to hide
         setTimeout(() => {
           this.show(ONLINE_SNACK);
-        }, 500);
+        }, DEFAULT_GAP);
       });
     }
   }
