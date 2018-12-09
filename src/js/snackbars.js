@@ -1,16 +1,18 @@
 import Snackbar from './snackbar';
 import {hasItem} from './util';
 
+// DEFAULTS
 const NETWORK_SNACKBARS_DURATION = 3200;
+const NETWORK_SNACKBARS_NAME_SUFFIX = '--default-snackbar';
 
 const OFFLINE_SNACK = {
-  name: 'offline',
+  name: 'offline'+NETWORK_SNACKBARS_NAME_SUFFIX,
   message: 'You seem to be offline',
   duration: NETWORK_SNACKBARS_DURATION
 }
 
 const ONLINE_SNACK = {
-  name: 'online',
+  name: 'online'+NETWORK_SNACKBARS_NAME_SUFFIX,
   message: 'You are back online',
   duration: NETWORK_SNACKBARS_DURATION
 }
