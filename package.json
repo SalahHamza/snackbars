@@ -7,7 +7,7 @@
     "bundle": "rollup -c"
   },
   "author": "Salah Hamza",
-  "license": "ISC",
+  "license": "CC0 1.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/SalahHamza/snackbar.git"
