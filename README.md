@@ -98,6 +98,10 @@ Type: `Boolean` Default: `500`(ms) Required: **No**
 
 Gap between showing every snackbar and the other in milliseconds.
 
+## Limitations
+
+* The snackbar element has a `z-index` of `999999`, that means any element on your page with a `z-index` heigher than that might hide the snackbar.
+
 ## License
 
 **Snackbars** is a public domain work, dedicated using [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/). Feel free to do whatever you want with it.
