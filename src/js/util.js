@@ -23,3 +23,18 @@ export const hasItem = (arr, propName, value) => {
 export const isHexColor = hexColorString => {
   return /^#[0-9A-F]{6}$/i.test(hexColorString);
 }
+
+/**
+ * Invokes callback function on `DOMContentLoaded` event or immediately if
+ * `DOMContentLoaded` event has already fired (i.e `document.readyState` is `loading`)
+ * @param {Function} callback - callback to call when `DOMContentLoaded` fires or
+ * after it fires
+ */
+export const onDOMContentLoadedOrAfter = callback => {
+  // catch if 'DOMContentLoaded' already fired
+  if (document.readyState === "loading") {
+    window.addEventListener('DOMContentLoaded', callback);
+  } else {
+    callback();
+  }
+}

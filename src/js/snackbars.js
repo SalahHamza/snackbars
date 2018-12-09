@@ -1,5 +1,5 @@
 import Snackbar from './snackbar';
-import {hasItem} from './util';
+import {hasItem, onDOMContentLoadedOrAfter} from './util';
 
 // DEFAULTS
 const NETWORK_SNACKBARS_DURATION = 3200;
@@ -20,23 +20,19 @@ const ONLINE_SNACK = {
 export default class Snackbars {
   /**
    *
-   * @param {Object} container - DOM element to append snackbar to
-   * @param {Boolean} makeNetworkStatusSnackbar - If true (default), makes custome snackbar
+   * @param {Object} container - DOM element to append snackbar to.
+   * defaults to body element
+   * @param {Boolean} makeNetworkStatusSnackbar - If true (default)
+   * makes custome nework (offline/online) snackbars
    */
   constructor(container, makeNetworkStatusSnackbar = false) {
     this.visibleSnackbar = null;
     this.queue = [];
 
-    // catch if 'DOMContentLoaded' already fired
-    if (document.readyState === "loading") {
-      window.addEventListener('DOMContentLoaded', event => {
-        this.container = container || document.body;
-        this._init(makeNetworkStatusSnackbar);
-      });
-    } else {
+    onDOMContentLoadedOrAfter(() => {
       this.container = container || document.body;
       this._init(makeNetworkStatusSnackbar);
-    }
+    });
   }
 
   /**
