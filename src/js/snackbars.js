@@ -1,15 +1,18 @@
 import Snackbar from './snackbar';
 import {hasItem} from './util';
 
+const NETWORK_SNACKBARS_DURATION = 3200;
+
 const OFFLINE_SNACK = {
   name: 'offline',
-  message: 'You seem to be offline'
+  message: 'You seem to be offline',
+  duration: NETWORK_SNACKBARS_DURATION
 }
 
 const ONLINE_SNACK = {
   name: 'online',
   message: 'You are back online',
-  duration: 3200
+  duration: NETWORK_SNACKBARS_DURATION
 }
 
 export default class Snackbars {
