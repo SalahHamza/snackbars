@@ -1,22 +1,22 @@
-import Snackbar from './snackbar';
-import {hasItem, onDOMContentLoadedOrAfter} from './util';
+import Snackbar from "./snackbar";
+import { hasItem, onDOMContentLoadedOrAfter } from "./util";
 
 // DEFAULTS
 const NETWORK_SNACKBARS_DURATION = 3200;
-const NETWORK_SNACKBARS_NAME_SUFFIX = '--default-snackbar';
+const NETWORK_SNACKBARS_NAME_SUFFIX = "--default-snackbar";
 const DEFAULT_GAP = 500;
 
 const OFFLINE_SNACK = {
-  name: 'offline'+NETWORK_SNACKBARS_NAME_SUFFIX,
-  message: 'You seem to be offline',
-  duration: NETWORK_SNACKBARS_DURATION
-}
+  name: "offline" + NETWORK_SNACKBARS_NAME_SUFFIX,
+  message: "You seem to be offline",
+  duration: NETWORK_SNACKBARS_DURATION,
+};
 
 const ONLINE_SNACK = {
-  name: 'online'+NETWORK_SNACKBARS_NAME_SUFFIX,
-  message: 'You are back online',
-  duration: NETWORK_SNACKBARS_DURATION
-}
+  name: "online" + NETWORK_SNACKBARS_NAME_SUFFIX,
+  message: "You are back online",
+  duration: NETWORK_SNACKBARS_DURATION,
+};
 
 export default class Snackbars {
   /**
@@ -41,10 +41,16 @@ export default class Snackbars {
    * @param {Object} configObj - snackbar configuration object
    */
   show(configObj) {
-    const {name, message, actions = [], duration, gap = DEFAULT_GAP} = configObj;
+    const {
+      name,
+      message,
+      actions = [],
+      duration,
+      gap = DEFAULT_GAP,
+    } = configObj;
     /* checking if the two most important properties are present */
-    if(!message || !name){
-      throw new Error('Snackbar name or message weren\'t provided.');
+    if (!message || !name) {
+      throw new Error("Snackbar name or message weren't provided.");
     }
 
     /*
@@ -55,8 +61,8 @@ export default class Snackbars {
             consecutively
           and we add new snackbar to the queue and return.
      */
-    if(this.visibleSnackbar) {
-      if(hasItem(this.queue, 'name', name)) return;
+    if (this.visibleSnackbar) {
+      if (hasItem(this.queue, "name", name)) return;
       this.queue.push(configObj);
       return;
     }
@@ -67,7 +73,7 @@ export default class Snackbars {
       message,
       duration,
       container: this._snackbarSkeleton,
-      actions
+      actions,
     });
 
     /* show snackbar */
@@ -89,7 +95,7 @@ export default class Snackbars {
   _addSnackbarHideEvent(snackbar, gap) {
     snackbar.container.addEventListener(`${snackbar.name}_hide`, () => {
       this.visibleSnackbar = null;
-      if(this.queue.length) {
+      if (this.queue.length) {
         setTimeout(() => {
           this.show(this.queue[0]);
         }, gap);
@@ -98,35 +104,44 @@ export default class Snackbars {
   }
 
   _createSnackbarSkeleton() {
-    this.container.insertAdjacentHTML('beforeend',
-    `<div
+    this.container.insertAdjacentHTML(
+      "beforeend",
+      `<div
       class="snackbar"
       aria-live="polite"
       aria-atomic="true"
       aria-hidden="true">
       <p class="snackbar-message"></p>
       <div class="snackbutts"></div>
-    </div>`);
-    this._snackbarSkeleton = document.querySelector('.snackbar');
+    </div>`,
+    );
+    this._snackbarSkeleton = document.querySelector(".snackbar");
   }
 
   _init(makeNetworkStatusSnackbar) {
     // creating snackbar skeleton
     this._createSnackbarSkeleton();
 
-    if(makeNetworkStatusSnackbar) {
+    if (makeNetworkStatusSnackbar) {
       /* Showing offline message when client is offline */
-      window.addEventListener('offline', () => {
-        this.queue = this.queue.filter(snack => snack.name !== ONLINE_SNACK.name);
+      window.addEventListener("offline", () => {
+        this.queue = this.queue.filter(
+          snack => snack.name !== ONLINE_SNACK.name,
+        );
         this.show(OFFLINE_SNACK);
       });
 
       /* showing online message when client is back online */
-      window.addEventListener('online', () => {
-        this.queue = this.queue.filter(snack => snack.name !== OFFLINE_SNACK.name);
+      window.addEventListener("online", () => {
+        this.queue = this.queue.filter(
+          snack => snack.name !== OFFLINE_SNACK.name,
+        );
         /* if current visible snackbar is offline
         snackbar, hide it when navigator is online */
-        if(this.visibleSnackbar && this.visibleSnackbar.name === OFFLINE_SNACK.name) {
+        if (
+          this.visibleSnackbar &&
+          this.visibleSnackbar.name === OFFLINE_SNACK.name
+        ) {
           this.visibleSnackbar.hide();
           this.visibleSnackbar = null;
         }
@@ -137,5 +152,4 @@ export default class Snackbars {
       });
     }
   }
-
 }
